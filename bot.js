@@ -33,18 +33,50 @@ var selnata1 = {
 var farkath1 = {
 	"name" : "Redcliff Bastion",
 	"max" : 70,
-	"min" : -20,
-	"tdays" : 365,
-	"tshift" : 0,
-	"phigh" : .45,
-	"plow" : .10,
-	"pdays" : 365,
+	"min" : 0,
+	"tdays" : 320,
+	"tshift" : 160,
+	"phigh" : .30,
+	"plow" : .05,
+	"pdays" : 320,
 	"pshift" : 0,
 	"shigh" : 3,
 	"slow" : 1.5,
-	"sdays" : 365,
+	"sdays" : 320,
 	"sshift" : 0,
 	"id" : "555184257245511711"
+};
+var farkath2 = {
+    "name" : "Teeth of Durgas",
+    "max" : 30,
+    "min" : -40,
+    "tdays" : 320,
+    "tshift" : 0,
+    "phigh" : .80,
+    "plow" : .60,
+    "pdays" : 320,
+    "pshift" : 0,
+    "shigh" : 6,
+    "slow" : 2,
+    "sdays" : 320,
+    "sshift" : 0,
+    "id" : "555184257245511711"
+};
+var farkath3 = {
+    "name" : "Andumor Plains",
+    "max" : 90,
+    "min" : 10,
+    "tdays" : 320,
+    "tshift" : 0,
+    "phigh" : .6,
+    "plow" : .2,
+    "pdays" : 320,
+    "pshift" : 200,
+    "shigh" : 6,
+    "slow" : 1,
+    "sdays" : 320,
+    "sshift" : 200,
+    "id" : "555184257245511711"
 };
 var vapor1 = {
     "name" : "Apullan",
@@ -127,7 +159,8 @@ var vapor5 = {
     "id" : "563491722420551717"
 };
 
-var climates =[selnata1,farkath1,vapor1,vapor2,vapor3,vapor4,vapor5];
+
+var climates =[selnata1,farkath1,farkath2,farkath3,vapor1,vapor2,vapor3,vapor4,vapor5];
 
 
 
@@ -232,25 +265,25 @@ function generatePrecipitation ( chance, severity ) {
 			color = ""
 		} else if (finalSeverity < 2) {
 			sevText = "Moderate Snow";
-			avgWind = 20;
+			avgWind = 10;
 			windSpeed = (Math.random() * windDeviation * 2) - windDeviation + avgWind;
             windSpeed = (windSpeed < 0) ? 0 : windSpeed;
             visib = "Low";
 		} else if (finalSeverity < 3) {
 			sevText = "Heavy Snow";
-			avgWind = 30;
+			avgWind = 15;
 			windSpeed = (Math.random() * windDeviation * 2) - windDeviation + avgWind;
             windSpeed = (windSpeed < 0) ? 0 : windSpeed;
             visib = "Low";
 		} else if (finalSeverity < 4) {
 			sevText = "Blizzard";
-			avgWind = 50;
+			avgWind = 35;
 			windSpeed = (Math.random() * windDeviation * 2) - windDeviation + avgWind;
             windSpeed = (windSpeed < 0) ? 0 : windSpeed;
             visib = "Limited";
 		} else if (finalSeverity < 5) {
 			sevText = "Severe Blizzard";
-			avgWind = 70;
+			avgWind = 50;
 			windSpeed = (Math.random() * windDeviation * 2) - windDeviation + avgWind;
             windSpeed = (windSpeed < 0) ? 0 : windSpeed;
             visib = "Limited";
@@ -311,25 +344,25 @@ function generatePrecipitation ( chance, severity ) {
 			color = ""
 		} else if (finalSeverity < 2) {
 			sevText = "Moderate precipitation";
-			avgWind = 20;
+			avgWind = 10;
 			windSpeed = (Math.random() * windDeviation * 2) - windDeviation + avgWind;
             windSpeed = (windSpeed < 0) ? 0 : windSpeed;
             visib = "Moderate";
 		} else if (finalSeverity < 3) {
 			sevText = "Heavy precipitation";
-			avgWind = 30;
+			avgWind = 15;
 			windSpeed = (Math.random() * windDeviation * 2) - windDeviation + avgWind;
             windSpeed = (windSpeed < 0) ? 0 : windSpeed;
             visib = "Moderate";
 		} else if (finalSeverity < 4) {
 			sevText = "Stormy";
-			avgWind = 50;
+			avgWind = 15;
 			windSpeed = (Math.random() * windDeviation * 2) - windDeviation + avgWind;
             windSpeed = (windSpeed < 0) ? 0 : windSpeed;
             visib = "Low";
 		} else if (finalSeverity < 5) {
 			sevText = "Severe storm";
-			avgWind = 70;
+			avgWind = 45;
 			windSpeed = (Math.random() * windDeviation * 2) - windDeviation + avgWind;
             windSpeed = (windSpeed < 0) ? 0 : windSpeed;
             visib = "Low";
@@ -409,8 +442,9 @@ function generateWeather(preset){
 	sshift = preset.sshift;
 	chance = generateChance(pdays,phigh,plow,pshift);
 	avgSeverity = generateSeverity(sdays,shigh,slow,sshift);
-	generatePrecipitation(chance,avgSeverity);
 	temp = getTemperature(max,min,tshift,tdays);
+	generatePrecipitation(chance,avgSeverity);
+	
 }
 
 bot.on("ready", async () => {
@@ -465,7 +499,7 @@ bot.on("message", async message => {
         .setColor(color)
         .setThumbnail(gicon)
         .addField("Average Temperature:", temp)
-        .addField("Wind Speed (mph):", windSpeed)
+        .addField("Wind Speed (mph):", Math.round(windSpeed))
         .addField("Precipitation:", precip)
         .addField("Severity of Precipitation:", sprecip)
         .addField("Visibility", visib);
@@ -487,7 +521,7 @@ function generateAll(){
 		.setThumbnail(gicon)
 		.addField("Plane/section", climates[i].name)
         .addField("Average Temperature:", temp)
-        .addField("Wind Speed (mph):", wind)
+        .addField("Wind Speed (mph):", windSpeed)
         .addField("Precipitation:", precip)
         .addField("Severity of Precipitation:", sevText)
         .addField("Visibility", visib);
